@@ -1,0 +1,14 @@
+{:paths []
+ :description "Boilerplate generator for webapps using rum and shadow-cljs."
+ :url       "https://github.com/ClockworksIO/rum-shadow-boiler"
+ :scm       {:name "git"
+             :url "git@github.com:ClockworksIO/rum-shadow-boiler.git"}
+ :license   {:name "Apache-2.0"
+             :url "https://www.apache.org/licenses/LICENSE-2.0"}
+ ;; library name
+ :lib-name clockworksio/rum-shadow-boiler
+ ;; current version - uses semantic versioning
+ :version "0.1.0"
+ ;; directory where all non-code resources are located
+ :resources-dir "resources"
+ }

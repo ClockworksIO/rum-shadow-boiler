@@ -1,0 +1,13 @@
+# node related
+node_modules/
+
+# Clojure Compiler
+.shadow-cljs/
+target/
+
+# Compiled JS, CSS, ... for App
+/resources/public/js/compiled/**
+/resources/public/css/main.css
+
+# Other
+.cpcache/
