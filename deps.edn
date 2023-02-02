@@ -11,4 +11,8 @@
  :version "0.1.0"
  ;; directory where all non-code resources are located
  :resources-dir "resources"
+ 
+ :aliases
+ {:format          {:deps         {mvxcvi/cljstyle                       {:mvn/version "0.15.0"}}}
+  }
  }

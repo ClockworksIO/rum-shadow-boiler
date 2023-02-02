@@ -1,0 +1,35 @@
+{:deps true
+
+ :dev-http  {9500 "resources/public"}
+
+ :builds {;; Run the PWA in development mode
+          :dev          {:target            :browser
+                         :output-dir        "resources/public/js/compiled"
+                         :assets-path       "/public/js/compiled"
+                         :modules           {:main          {:init-fn           {{ project-name }}.core/setup}}
+                         :devtools          {:repl-pprint   true}
+                         :compiler-options  {:source-map true}
+                         :closure-defines   {{{ project-name }}.constants/mode  "DEVELOPMENT"}}
+          ;; Create a bundle of the PWA for deployment of a feature branch
+          :feature      {:target            :browser
+                         :output-dir        "resources/public/js/compiled"
+                         :assets-path       "/public/js/compiled"
+                         :modules           {:main          {:init-fn           {{ project-name }}.core/setup}}
+                         :devtools          {:repl-pprint   true}
+                         :closure-defines   {{{ project-name }}.constants/mode  "FEATURE"}}
+          ;; Create a production ready bundle of the PWA for deployment on @production
+          :prod         {:target            :browser
+                         :output-dir        "resources/public/js/compiled"
+                         :assets-path       "/public/js/compiled"
+                         :modules           {:main          {:init-fn           {{ project-name }}.core/setup}}
+                         :devtools          {:repl-pprint   true}
+                         :closure-defines   {{{ project-name }}.constants/mode  "PRODUCTION"}}
+          ;; Storybook
+          :stories      {:target            :npm-module
+                         :ns-regexp         "-stories$"
+                         :output-dir        "resources/stories/compiled"}
+          ;; Cypress - Component tests
+          :cy-component {:target            :npm-module
+                         :runtime           :browser
+                         :ns-regexp         "-cypress$"
+                         :output-dir        "resources/cy-component/compiled"}}}

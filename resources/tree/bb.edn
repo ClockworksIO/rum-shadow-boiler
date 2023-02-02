@@ -1,0 +1,63 @@
+{:paths ["bb" "src"]
+ :deps  {babashka/process     		 		        {:mvn/version "0.3.11"}
+         clojure-term-colors/clojure-term-colors  {:mvn/version "0.1.0"}
+         io.github.babashka/instaparse.bb         {:git/sha "0e86a09bafead57eed251cbda53ab35032688bdf"}
+         io.github.clj-kondo/clj-kondo-bb         {:git/tag "v2023.01.20" 
+                                                   :git/sha "adfc7df"}
+         clockworksIO/clci                        {:git/url "https://github.com/ClockworksIO/clci.git"
+                                                   :git/tag "0.3.0" 
+                                                   :git/sha "0662a1b3dd61079a09def6c71d357629b72df383"}}
+
+
+ :tasks {format               {:doc         "Run the formatter to format the project's clojure code."
+                 	             :requires    ([format :as fmt])
+                 	             :task        (apply fmt/format-code *command-line-args*)}
+	      hooks  	            {:doc         "Git hook related commands."
+                 	             :requires    ([git-hooks :as gh])
+                 	             :task        (apply gh/hooks *command-line-args*)}
+         lint                 {:doc         "Run kondo to lint the code. Fail on errors."
+                               :requires    ([utils :as u])
+                               :task        u/kondo-lint}
+         docs                 {:doc         "Handle the documentation of the project."
+                               :requires    ([docs :as docs])
+                               :task        (apply docs/docs! *command-line-args*)}
+         dev                  {:doc         "Run a local development server for the webapp."
+                               :task        (run '-dev {:parallel true})}
+         -dev                 {:depends     [dev:postcss dev:cljs]}
+         dev:cljs             {:doc         "Start shadow-cljs in watch mode and build the webapp."
+                               :requires    ([tasks :as t])
+                               :task        (apply t/dev ["shadow-cljs"])}
+         dev:postcss          {:doc         "Start postcss in watch mode."
+                               :requires    ([tasks :as t])
+                               :task        (apply t/dev ["postcss"])}
+         
+         storybook            {:doc         "Run a local storybook server for the webapp."
+                               :task        (run '-storybook {:parallel true})}
+         -storybook           {:depends     [storybook:postcss storybook:cljs storybook:server]}
+         storybook:cljs       {:doc         "Start shadow-cljs in watch mode and build all stories."
+                               :requires    ([tasks :as t])
+                               :task        (apply t/storybook ["shadow-cljs"])}
+         storybook:postcss    {:doc         "Start postcss in watch mode (for storybook)."
+                               :requires    ([tasks :as t])
+                               :task        (apply t/storybook ["postcss"])}
+         storybook:server     {:doc         "Start a storybook instance on localhost."
+                               :requires    ([tasks :as t])
+                               :task        (apply t/storybook ["server"])}
+         
+         cypress              {:doc         "Run a local storybook server for the webapp."
+                               :task        (run '-cypress {:parallel true})}
+         -cypress             {:depends     [cypress:postcss cypress:cljs cypress:server]}
+         cypress:cljs         {:doc         "Start shadow-cljs in watch mode and build the component tests."
+                               :requires    ([tasks :as t])
+                               :task        (apply t/cypress ["shadow-cljs"])}
+         cypress:postcss      {:doc         "Start postcss in watch mode (for cypress)."
+                               :requires    ([tasks :as t])
+                               :task        (apply t/cypress ["postcss"])}
+         cypress:server       {:doc         "Start a cypress instance on localhost."
+                               :requires    ([tasks :as t])
+                               :task        (apply t/cypress ["server"])}
+         
+         prepare              {:doc         "Prepare the project workspace."
+                               :requires    ([tasks :as t])
+                               :task        t/prepare!}
+         }}

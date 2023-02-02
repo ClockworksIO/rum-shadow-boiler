@@ -32,6 +32,9 @@
       (sh (format "git add %s" file)))))
 
 
+;; (when-let [files (changed-files)]
+;;   (apply sh "cljstyle" "fix" (filter clj? files))))
+
 ;; Git 'commit-msg' hook.
 ;; Takes the commit message and validates it conforms to the Conventional Commit specification
 (defmethod hooks "commit-msg" [& _]
