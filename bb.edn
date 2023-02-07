@@ -1,12 +1,12 @@
 {:paths ["bb"]
  :deps  {babashka/process     		 	           {:mvn/version "0.3.11"}
          clojure-term-colors/clojure-term-colors  {:mvn/version "0.1.0"}
-         io.github.babashka/instaparse.bb         {:git/sha "0e86a09bafead57eed251cbda53ab35032688bdf"}
-         io.github.clj-kondo/clj-kondo-bb         {:git/tag "v2023.01.20" 
-                                                   :git/sha "adfc7df"}
+         ;io.github.babashka/instaparse.bb         {:git/sha "0e86a09bafead57eed251cbda53ab35032688bdf"}
+         ;io.github.clj-kondo/clj-kondo-bb         {:git/tag "v2023.01.20" 
+         ;                                          :git/sha "adfc7df"}
          clockworksIO/clci                        {:git/url "https://github.com/ClockworksIO/clci.git"
-                                                   :git/tag "0.3.0" 
-                                                   :git/sha "0662a1b3dd61079a09def6c71d357629b72df383"}
+                                                   :git/tag "0.3.2" 
+                                                   :git/sha "7d4413d2b2f681325f0daffb8cd8ff9e92abcabd"}
 }
 
 
