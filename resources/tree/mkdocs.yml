@@ -1,0 +1,42 @@
+site_name: clci
+site_description: >-
+  {{ project-description }}
+
+# Repository
+repo_name: {{ project-repository-name }}
+repo_url: {{ project-repository-url }}
+
+site_dir: target/docs
+
+theme:
+  name: material
+  icon:
+    repo: fontawesome/brands/gitlab
+  # Don't include MkDocs' JavaScript
+  include_search_page: false
+  search_index_only: true
+
+  # Default values, taken from mkdocs_theme.yml
+  language: en
+  features:
+    - navigation.tabs
+    - navigation.sections
+
+markdown_extensions:
+  - footnotes
+  - pymdownx.critic
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - def_list
+  - pymdownx.tasklist:
+      custom_checkbox: true
+
+nav:
+  - Home: index.md

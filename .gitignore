@@ -1,13 +1,8 @@
-# node related
-node_modules/
-
-# Clojure Compiler
-.shadow-cljs/
-target/
-
-# Compiled JS, CSS, ... for App
-/resources/public/js/compiled/**
-/resources/public/css/main.css
+# Generated default example 
+example/
 
 # Other
-.cpcache/
+/.cpcache/
+/.clj-kondo/
+/.babashka/
+/.lsp/
