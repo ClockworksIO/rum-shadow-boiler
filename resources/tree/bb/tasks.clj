@@ -14,6 +14,7 @@
   - fetch all bb dependencies"
   []
   (shell {:inherit true} "yarn")
+  (shell {:inherit true} "clojure -Ttools install nvd-clojure/nvd-clojure '{:mvn/version \"RELEASE\"}' :as nvd")
   (gh/hooks "install"))
 
 
