@@ -1,8 +1,9 @@
 (ns utils
   "Utilities"
   (:require
-    [babashka.process :refer [shell]]
+    [babashka.process :refer [shell sh]]
     [clj-kondo.core :as clj-kondo]
+    [clojure.string :as str]
     [clojure.term.colors :as c]))
 
 
@@ -24,12 +25,12 @@
 (defn clj-nvd-audit
   ""
   []
-  (let [path (-> (shell "clojure -Spath -A:any:aliases") :out)
-        cmd  (format "clojure -J-Dclojure.main.report=stderr -Tnvd nvd.task/check :classpath \"\"%s\"\"" path)]
+  (let [path (-> (sh "clojure -Spath -A:any:aliases") :out str/trim-newline)
+        cmd  (format "clojure -J-Dclojure.main.report=stderr -Tnvd nvd.task/check :classpath \\\"%s\\\"" path)]
     (println (c/red path))
     (println (c/blue cmd))
     (shell
       {:inherit true}
       (format
-        "clojure -J-Dclojure.main.report=stderr -Tnvd nvd.task/check :classpath \"\"%s\"\""
+        "clojure -J-Dclojure.main.report=stderr -Tnvd nvd.task/check :classpath \\\"%s\\\""
         path))))
