@@ -19,6 +19,9 @@
          lint                 {:doc         "Run kondo to lint the code. Fail on errors."
                                :requires    ([utils :as u])
                                :task        u/kondo-lint}
+         audit                {:doc ""
+                               :requires ([utils :as u])
+                               :task u/clj-nvd-audit}
          docs                 {:doc         "Handle the documentation of the project."
                                :requires    ([docs :as docs])
                                :task        (apply docs/docs! *command-line-args*)}

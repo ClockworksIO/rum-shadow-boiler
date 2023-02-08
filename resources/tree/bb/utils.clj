@@ -1,7 +1,9 @@
 (ns utils
   "Utilities"
   (:require
-    [clj-kondo.core :as clj-kondo]))
+    [babashka.process :refer [shell]]
+    [clj-kondo.core :as clj-kondo]
+    [clojure.term.colors :as c]))
 
 
 (defn kondo-lint
@@ -18,3 +20,16 @@
              (pos? (:error summary)))
        (throw (ex-info "Linter failed!" {:babashka/exit 1}))))))
 
+
+(defn clj-nvd-audit
+  ""
+  []
+  (let [path (-> (shell "clojure -Spath -A:any:aliases") :out)
+        cmd  (format "clojure -J-Dclojure.main.report=stderr -Tnvd nvd.task/check :classpath \"\"%s\"\"" path)]
+    (println (c/red path))
+    (println (c/blue cmd))
+    (shell
+      {:inherit true}
+      (format
+        "clojure -J-Dclojure.main.report=stderr -Tnvd nvd.task/check :classpath \"\"%s\"\""
+        path))))
