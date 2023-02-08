@@ -1,12 +1,11 @@
 {:paths ["bb" "src"]
  :deps  {babashka/process     		 		        {:mvn/version "0.3.11"}
-         clojure-term-colors/clojure-term-colors  {:mvn/version "0.1.0"}
          io.github.babashka/instaparse.bb         {:git/sha "0e86a09bafead57eed251cbda53ab35032688bdf"}
          io.github.clj-kondo/clj-kondo-bb         {:git/tag "v2023.01.20" 
                                                    :git/sha "adfc7df"}
          clockworksIO/clci                        {:git/url "https://github.com/ClockworksIO/clci.git"
-                                                   :git/tag "0.3.0" 
-                                                   :git/sha "0662a1b3dd61079a09def6c71d357629b72df383"}}
+                                                   :git/tag "0.4.0" 
+                                                   :git/sha "e8c12ca327721caaafa05a8688dfad2cd080b243"}}
 
 
  :tasks {format               {:doc         "Run the formatter to format the project's clojure code."
@@ -16,8 +15,8 @@
                  	             :requires    ([git-hooks :as gh])
                  	             :task        (apply gh/hooks *command-line-args*)}
          lint                 {:doc         "Run kondo to lint the code. Fail on errors."
-                               :requires    ([utils :as u])
-                               :task        u/kondo-lint}
+                               :requires    ([lint :as l])
+                               :task        l/kondo-lint}
          docs                 {:doc         "Handle the documentation of the project."
                                :requires    ([docs :as docs])
                                :task        (apply docs/docs! *command-line-args*)}

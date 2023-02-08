@@ -2,8 +2,9 @@
   "Arbitrary tasks."
   (:require
     [babashka.process :refer [shell]]
-    [clojure.term.colors :as c]
-    [git-hooks :as gh]))
+    [clci.term :refer [with-c]]
+    [git-hooks :as gh]
+    [proc-wrapper :refer [wrap]]))
 
 
 (defn prepare!
@@ -24,20 +25,20 @@
 
 
 ;; Run a shadow-cljs development server with hot reloading
-(defmethod dev "shadow-cljs" [& args]
-  (println (c/blue "[dev:shadow-cljs]" "starting..."))
-  (shell {:inherit true} "npx shadow-cljs watch dev -A :dev"))
+(defmethod dev "shadow-cljs" [& _]
+  (println (with-c :blue "[dev:shadow-cljs]") "starting ...")
+  (wrap ["[shadow-cljs]" :green] ["clojure -M -m shadow.cljs.devtools.cli --force-spawn watch dev"]))
 
 
 ;; Run a postcss development server with hot reloading
-(defmethod dev "postcss" [& args]
-  (println (c/blue "[dev:postcss]" "starting..."))
-  (shell {:inherit true :extra-env {"TAILWIND_MODE" "dev"}} "npx postcss src/css/tailwind.css -o ./resources/public/css/main.css --verbose -w"))
+(defmethod dev "postcss" [& _]
+  (println (with-c :blue  "[dev:postcss]") "starting ...")
+  (wrap ["[postcss]" :blue] [{:extra-env {"TAILWIND_MODE" "dev"}} "npx postcss src/css/tailwind.css -o ./resources/public/css/main.css --verbose -w"]))
 
 
 ;; Default handler to catch invalid hooks
 (defmethod dev :default [& args]
-  (println (c/yellow "Unknown command: ") (c/red (first args))))
+  (println (with-c :yellow "Unknown command: ") (with-c :red (first args))))
 
 
 ;; Multimethod to handle all tasks to run a local instance of storybook.
@@ -46,24 +47,24 @@
 (defmulti storybook (fn [& args] (first args)))
 
 
-(defmethod storybook "shadow-cljs" [& args]
-  (println (c/blue "[storybook:shadow-cljs]" "starting..."))
-  (shell {:inherit true} "npx shadow-cljs watch stories"))
+(defmethod storybook "shadow-cljs" [& _]
+  (println (with-c :blue "[storybook:shadow-cljs]") "starting ...")
+  (wrap ["[shadow-cljs]" :green] ["clojure -M -m shadow.cljs.devtools.cli --force-spawn watch stories"]))
 
 
-(defmethod storybook "postcss" [& args]
-  (println (c/blue "[storybook:postcss]" "starting..."))
-  (shell {:inherit true :extra-env {"TAILWIND_MODE" "dev"}} "npx postcss src/css/tailwind.css -o ./resources/public/css/main.css --verbose -w"))
+(defmethod storybook "postcss" [& _]
+  (println (with-c :blue "[storybook:postcss]") "starting ...")
+  (wrap ["[postcss]" :blue] [{:extra-env {"TAILWIND_MODE" "dev"}} "npx postcss src/css/tailwind.css -o ./resources/public/css/main.css --verbose -w"]))
 
 
-(defmethod storybook "server" [& args]
-  (println (c/blue "[storybook:server]" "starting..."))
-  (shell {:inherit true} "npx start-storybook -p 6006 --no-open"))
+(defmethod storybook "server" [& _]
+  (println (with-c :blue "[storybook:server]") "starting ...")
+  (wrap ["[storybook]" :yellow] ["npx start-storybook -p 6006 --no-open"]))
 
 
 ;; Default handler to catch invalid hooks
 (defmethod storybook :default [& args]
-  (println (c/yellow "Unknown command: ") (c/red (first args))))
+  (println (with-c :yellow "Unknown command: ") (with-c :red (first args))))
 
 
 ;; Multimethod to handle all tasks to run a local instance of Cypress for component tests.
@@ -72,22 +73,22 @@
 (defmulti cypress (fn [& args] (first args)))
 
 
-(defmethod cypress "shadow-cljs" [& args]
-  (println (c/blue "[cypress:shadow-cljs]" "starting..."))
-  (shell {:inherit true} "npx shadow-cljs watch cy-component -A :cy-component"))
+(defmethod cypress "shadow-cljs" [& _]
+  (println (with-c :blue "[cypress:shadow-cljs]") "starting ...")
+  (wrap ["[shadow-cljs]" :green] ["clojure -M -m shadow.cljs.devtools.cli --force-spawn watch cy-component"]))
 
 
-(defmethod cypress "postcss" [& args]
-  (println (c/blue "[cypress:postcss]" "starting..."))
-  (shell {:inherit true :extra-env {"TAILWIND_MODE" "cy-component"}} "npx postcss src/css/tailwind.css -o ./resources/cy-component/compiled/main.css --verbose -w"))
+(defmethod cypress "postcss" [& _]
+  (println (with-c :blue "[cypress:postcss]") "starting. ..")
+  (wrap ["[postcss]" :blue] [{:extra-env {"TAILWIND_MODE" "cy-component"}} "npx postcss src/css/tailwind.css -o ./resources/cy-component/compiled/main.css --verbose -w"]))
 
 
-(defmethod cypress "server" [& args]
-  (println (c/blue "[cypress:server]" "starting..."))
-  (shell {:inherit true} "npx cypress open --component"))
+(defmethod cypress "server" [& _]
+  (println (with-c :blue "[cypress:server]") "starting...")
+  (wrap ["[cy]" :yellow] ["npx cypress open --component"]))
 
 
 ;; Default handler to catch invalid hooks
 (defmethod cypress :default [& args]
-  (println (c/yellow "Unknown command: ") (c/red (first args))))
+  (println (with-c :yellow "Unknown command: ") (with-c :red (first args))))
 

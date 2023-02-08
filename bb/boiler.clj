@@ -2,8 +2,8 @@
   "This module holds the functions to create a project boilerplate."
   (:require
     [babashka.fs :as fs]
+    [clci.term :refer [with-c]]
     [clojure.string :as str]
-    [clojure.term.colors :as c]
     [clojure.tools.cli :refer [parse-opts]])
   (:import
     java.time.LocalDateTime
@@ -92,13 +92,13 @@
 
 ;; Git 'commit-msg' hook.
 ;; Takes the commit message and validates it conforms to the Conventional Commit specification
-(defmethod new "project" [& args]
+(defmethod new "project" [& _]
   (let [opts        (parse-opts *command-line-args* cli-options)
         options     (:options opts)
         base-path   (:path options)]
     ;; if any mandatory arguments are missing, exit
     (when-not (and (some? (:path options)) (some? (:name options)))
-      (println (c/red "Creating a new project requires at least the '--name' and '--path' arguments!")
+      (println (with-c :red "Creating a new project requires at least the '--name' and '--path' arguments!")
                (System/exit 1)))
     ;; copy tree for project base
     (fs/copy-tree "./resources/tree" base-path)
@@ -157,6 +157,6 @@
 
 ;; Default handler to catch invalid hooks
 (defmethod new :default [& args]
-  (println (c/yellow "Unknown command: ") (c/red (first args))))
+  (println (with-c :yellow "Unknown command: ") (with-c :red (first args))))
 
 
